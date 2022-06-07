@@ -10,6 +10,10 @@ class Sudoku
 private:
     //Private Methods
     bool validateInput(int row, int col, int num);
+    bool rowPlacementValid(int row, int col, int num);
+    bool colPlacementValid(int row, int col, int num);
+    bool subGridPlacementValid(int row, int col, int num);
+    bool moveValid(int row, int col, int num);
 
 public:
     Sudoku();
@@ -30,10 +34,6 @@ public:
 
     //Public Methods
     void printBoard();
-    bool rowPlacementValid(int row, int col, int num);
-    bool colPlacementValid(int row, int col, int num);
-    bool subGridPlacementValid(int row, int col, int num);
-    bool moveValid(int row, int col, int num);
     tuple<int, int> getEmptySpace();
     bool solve();
 };
