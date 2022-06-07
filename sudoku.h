@@ -1,10 +1,12 @@
 #ifndef SUDOKU_H
 #define SUDOKU_H
 
-
 class Sudoku
 {
-    public:
+private:
+    //Private Methods
+    bool validateInput(int row, int col, int num);
+public:
     Sudoku();
     const int rowSize = 9;
     const int colSize = 9;
@@ -21,7 +23,12 @@ class Sudoku
         {0,0,0,0,0,0,0,0,0}
     };
 
+    //Public Methods
     void printBoard();
+    bool rowPlacementValid(int row, int col, int num);
+    bool colPlacementValid(int row, int col, int num);
+    bool subGridPlacementValid(int row, int col, int num);
+    bool moveValid(int row, int col, int num);
 };
 
 #endif // SUDOKU_H
