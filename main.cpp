@@ -5,5 +5,7 @@ int main()
 {
     Sudoku sudoku;
     sudoku.printBoard();
+    sudoku.solve();
+    sudoku.printBoard();
     return 0;
 }

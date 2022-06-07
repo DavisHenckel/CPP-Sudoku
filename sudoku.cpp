@@ -33,7 +33,8 @@ void Sudoku::printBoard() {
 
 bool Sudoku::validateInput(int row, int col, int num) {
     if (num > 9 || num < 1) {
-        throw invalid_argument("Number must be between 1 and 9 (inclusive)");
+        string errorStr = "Number must be between 1 and 9 (inclusive)\nNumber was: {0}", num;
+        throw invalid_argument(errorStr);
         return false;
     }
     if (row > 8 || row < 0) {
@@ -41,7 +42,7 @@ bool Sudoku::validateInput(int row, int col, int num) {
         return false;
     }
     if (col > 8 || col < 0) {
-        throw invalid_argument("Number must be between 0 and 8 (inclusive)");
+        throw invalid_argument("Column must be between 0 and 8 (inclusive)");
         return false;
     }
     return true;
@@ -71,3 +72,60 @@ bool Sudoku::colPlacementValid(int row, int col, int num) {
     return true;
 };
 
+bool Sudoku::subGridPlacementValid(int row, int col, int num) {
+    if (!this->validateInput(row, col, num)) {
+        return false;
+    }
+    int subgridRowStart = row / 3 * 3;
+    int subgridColStart = col / 3 * 3;
+    for (int i = subgridRowStart; i < subgridRowStart + 3; i++) {
+        for (int j = subgridColStart; j < subgridColStart + 3; j++) {
+            if (this->sudokuBoard[i][j] == num) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+bool Sudoku::moveValid(int row, int col, int num) {
+    if (!this->validateInput(row, col, num)) {
+        return false;
+    }
+    if (this->colPlacementValid(row,col,num)
+        && this->rowPlacementValid(row,col,num)
+        && this->subGridPlacementValid(row,col,num)) {
+        return true;
+    }
+    return false;
+}
+
+tuple<int, int> Sudoku::getEmptySpace() {
+    for (int i = 0; i < rowSize; i++) {
+        for (int j = 0; j < colSize; j++) {
+            if (this->sudokuBoard[i][j] == 0) {
+                return make_tuple(i,j);
+            }
+        }
+    }
+    return make_tuple(-1,-1);
+}
+
+bool Sudoku::solve() {
+    tuple<int, int> nextEmptySpot = this->getEmptySpace();
+    if (get<0>(nextEmptySpot) == -1) {
+        return true;
+    }
+    else {
+        for (int i = 1; i < 10; i++) {
+            if (this->moveValid(get<0>(nextEmptySpot), get<1>(nextEmptySpot), i)) {
+                this->sudokuBoard[get<0>(nextEmptySpot)][get<1>(nextEmptySpot)] = i;
+                if (this->solve()) {
+                    return true;
+                }
+                this->sudokuBoard[get<0>(nextEmptySpot)][get<1>(nextEmptySpot)] = 0;
+            }
+        }
+        return false;
+    }
+}
