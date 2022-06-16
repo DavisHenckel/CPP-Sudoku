@@ -6,3 +6,8 @@ I built this project with a sudoku class and fed it the unique solution that too
 I also took the opportunity to build out a Sudoku class to refresh skills with C++ class building.  
   
 This project was built with QT creator and uses QMake.
+
+I also tested this using mingw to compile. To compile and retrieve an executable, use the gcc/g++ compiler  
+```
+g++ main.cpp sudoku.cpp -o Sudoku.exe
+```
