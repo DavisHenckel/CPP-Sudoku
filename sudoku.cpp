@@ -1,10 +1,18 @@
 #include "sudoku.h"
-#include <stdio.h>
-#include <stdexcept>
 
 using namespace std;
 
-Sudoku::Sudoku(){};
+Sudoku::Sudoku(int numClues){
+    generatePuzzle(numClues);
+};
+
+Sudoku::Sudoku(int** initArray[9][9]) {
+    for (int i = 0; i < this->rowSize; i++) {
+        for (int j = 0; j < this->colSize; j++) {
+            **initArray[i][j] = this->sudokuBoard[i][j];
+        }
+    }
+}
 
 void Sudoku::printBoard() {
     printf("+++++++++++++++++++++++++\n");
@@ -129,3 +137,39 @@ bool Sudoku::solve() {
         return false;
     }
 }
+
+void Sudoku::generatePuzzle(int numClues, int counter) {
+    if (counter == numClues) {
+        return;
+    }
+    int rowPlacement = rand() % 9;
+    int colPlacement = rand() % 9;
+    int randomNum = (rand() % 9) + 1;
+    if (this->sudokuBoard[rowPlacement][colPlacement] == 0) {
+        if (this->moveValid(rowPlacement, colPlacement, randomNum)) {
+            this->sudokuBoard[rowPlacement][colPlacement] = randomNum;
+            int copyArray [9][9];
+            //quick for loop to copy elements to copy array.
+            for (int i = 0; i < this->rowSize; i++) {
+                for (int j = 0; j < this->colSize; j++) {
+                    copyArray[i][j] = this->sudokuBoard[i][j];
+                }
+            }
+            //Instantiate new puzzle with current state of array to see if solvable.
+            Sudoku copyPuzzle = Sudoku(**copyArray);
+            if (copyPuzzle.solve()) {
+                return this->generatePuzzle(numClues, counter + 1);
+            }
+            this->sudokuBoard[rowPlacement][colPlacement] = 0;
+            return this->generatePuzzle(numClues, counter);
+        }
+        else {
+            return this->generatePuzzle(numClues, counter);
+        }
+    }
+    else {
+        return this->generatePuzzle(numClues, counter);
+    }
+
+}
+
