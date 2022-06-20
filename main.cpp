@@ -1,7 +1,7 @@
 #include "sudoku.h"
 #include <iostream>
 
-int GetNumClues() {
+int getNumClues() {
     while(true) {
         printf("Enter a number of clues: ");
         int num;
@@ -23,9 +23,10 @@ int GetNumClues() {
 
 int main()
 {
+    srand(time(NULL));
     printf("Welcome to CPP Sudoku!\n    Press ctrl+c at any time to exit.\n\n");
     while(true) {
-        int numClues = GetNumClues();
+        int numClues = getNumClues();
         Sudoku sudoku = Sudoku(numClues);
         printf("Here is your random puzzle\nPress any key when ready to solve.\n");
         sudoku.printBoard();

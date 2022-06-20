@@ -1,10 +1,8 @@
 #include "sudoku.h"
 
-
 using namespace std;
 
 Sudoku::Sudoku(int numClues){
-    srand(time(NULL));
     generatePuzzle(numClues);
 };
 
